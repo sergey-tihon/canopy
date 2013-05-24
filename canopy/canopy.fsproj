@@ -44,6 +44,7 @@
     <Compile Include="reporters.fs" />
     <Compile Include="configuration.fs" />
     <Compile Include="levenshtein.fs" />
+    <Compile Include="browser.fs" />
     <Compile Include="canopy.fs" />
     <Compile Include="history.fs" />
     <Compile Include="runner.fs" />
