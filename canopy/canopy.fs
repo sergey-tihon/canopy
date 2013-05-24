@@ -154,18 +154,25 @@ let drag cssSelectorA cssSelectorB = canopyBrowser.drag cssSelectorA cssSelector
 //browser related
 let pin direction = canopyBrowser.pin direction
 
-let start (b : string) =    
+let startBrowser (b : string) =    
     //for chrome you need to download chromedriver.exe from http://code.google.com/p/chromedriver/wiki/GettingStarted
     //place chromedriver.exe in c:\ or you can place it in a customer location and change chromeDir value above
     //for ie you need to set Settings -> Advance -> Security Section -> Check-Allow active content to run files on My Computer*
     //also download IEDriverServer and place in c:\ or configure with ieDir
     //firefox just works
-    match b with
-    | "ie" -> browser <- new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
-    | "chrome" -> browser <- new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
-    | _ -> browser <- new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
-    canopyBrowser <- CanopyBrowser(browser)
-    if autoPinBrowserRightOnLaunch = true then canopyBrowser.pin Right
+    let browser =
+        match b with
+        | "ie" -> new OpenQA.Selenium.IE.InternetExplorerDriver(ieDir) :> IWebDriver
+        | "chrome" -> new OpenQA.Selenium.Chrome.ChromeDriver(chromeDir) :> IWebDriver
+        | _ -> new OpenQA.Selenium.Firefox.FirefoxDriver() :> IWebDriver
+    CanopyBrowser(browser)
+
+
+let start (b : string) =    
+    let cb = startBrowser b
+    canopyBrowser <- cb
+    if autoPinBrowserRightOnLaunch = true then cb.pin Right
+    browser <- cb.browser
     browsers <- browsers @ [browser]
 
 let switchTo browserObj = 
